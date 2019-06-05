@@ -11,7 +11,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.get('/api', (req, res) => {
-    res.send('<p>continue to /api/blogs to see what you are looking for</p>')
+  res.send('<p>continue to /api/blogs to see what you are looking for</p>')
 })
 
 app.use('/api/blogs', blogsRouter)
