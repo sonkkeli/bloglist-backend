@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "paska blogi5",
+    "author": "testi",
+    "url": "www.google.fi/paskablogi5",
+    "likes": 0
+}
