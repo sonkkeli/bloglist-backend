@@ -30,84 +30,37 @@ const favouriteBlog = ( blogs ) => {
   }
 }
 
-const mostBlogs = ( blogs ) => {
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) return ''
 
-  if (blogs.length === 0){
-    return ''
+  var bloggers = [...new Set(blogs.map(b => b.author))]
+
+  var bloggersWithBlogs = []
+  for ( var i = 0; i < bloggers.length; i++){
+    bloggersWithBlogs.push({
+      author: bloggers[i],
+      blogs: blogs.filter( a => a.author == bloggers[i]).length
+    })
   }
 
-  var bloggers = [{
-    author:blogs[0].author,
-    blogs: 1
-  }]
-
-  for ( var i = 0 ; i < blogs.length ; i++ ){
-    var found = false
-    var foundIndex = 0
-    for ( var j = 0 ; j < bloggers.length ; j++ ){
-      if (bloggers[j].author == blogs[i].author){
-        found = true
-        foundIndex = j
-      }
-    }
-    if (found) {
-      bloggers[foundIndex].blogs += 1
-    } else {
-      bloggers.push({
-        author:blogs[i].author,
-        blogs: 1
-      })
-    }
-  }
-
-  var most = bloggers[0]
-  for ( var k = 0 ; k < bloggers.length ; k++ ){
-    if (bloggers[k].blogs > most.blogs){
-      most = bloggers[k]
-    }
-  }
-
-  return most
+  return bloggersWithBlogs.reduce((previous, current) => (previous.blogs > current.blogs) ? previous : current )
 }
 
-const mostLikes = ( blogs ) => {
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return ''
 
-  if (blogs.length === 0){
-    return ''
+  var bloggers = [...new Set(blogs.map(b => b.author))]
+
+  var bloggersWithLikes = []
+  for ( var i = 0; i < bloggers.length; i++){
+    var bloggersBlogs = blogs.filter( a => a.author == bloggers[i])
+    bloggersWithLikes.push({
+      author: bloggers[i],
+      likes: bloggersBlogs.reduce((previous, current) => previous + current.likes, 0) // muista alkuarvo tai kämmää
+    })
   }
 
-  var bloggers = [{
-    author: blogs[0].author,
-    likes: blogs[0].likes
-  }]
-
-  for ( var i = 0 ; i < blogs.length ; i++ ){
-    var found = false
-    var foundIndex = 0
-    for ( var j = 0 ; j < bloggers.length ; j++ ){
-      if (bloggers[j].author == blogs[i].author){
-        found = true
-        foundIndex = j
-      }
-    }
-    if (found) {
-      bloggers[foundIndex].likes += blogs[i].likes
-    } else {
-      bloggers.push({
-        author: blogs[i].author,
-        likes: blogs[i].likes
-      })
-    }
-  }
-
-  var most = bloggers[0]
-  for ( var k = 0 ; k < bloggers.length ; k++ ){
-    if (bloggers[k].likes > most.likes){
-      most = bloggers[k]
-    }
-  }
-
-  return most
+  return bloggersWithLikes.reduce((previous, current) => (previous.likes > current.likes) ? previous : current )
 }
 
 module.exports = {
