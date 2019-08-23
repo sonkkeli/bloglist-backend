@@ -11,6 +11,8 @@ const totalLikes = ( blogs ) => {
 }
 
 const favouriteBlog = ( blogs ) => {
+  if (blogs.length === 0) return ''
+
   var maxLikes = 0
   var favBlog = ''
   for ( var i = 0 ; i < blogs.length ; i++ ){
@@ -19,14 +21,11 @@ const favouriteBlog = ( blogs ) => {
       favBlog = blogs[i]
     }
   }
-  if (blogs.length > 0){
-    return {
-      title: favBlog.title,
-      author: favBlog.author,
-      likes: favBlog.likes
-    }
-  } else {
-    return ''
+
+  return {
+    title: favBlog.title,
+    author: favBlog.author,
+    likes: favBlog.likes
   }
 }
 
@@ -34,7 +33,6 @@ const mostBlogs = (blogs) => {
   if (blogs.length === 0) return ''
 
   var bloggers = [...new Set(blogs.map(b => b.author))]
-
   var bloggersWithBlogs = []
   for ( var i = 0; i < bloggers.length; i++){
     bloggersWithBlogs.push({
@@ -50,7 +48,6 @@ const mostLikes = (blogs) => {
   if (blogs.length === 0) return ''
 
   var bloggers = [...new Set(blogs.map(b => b.author))]
-
   var bloggersWithLikes = []
   for ( var i = 0; i < bloggers.length; i++){
     var bloggersBlogs = blogs.filter( a => a.author == bloggers[i])

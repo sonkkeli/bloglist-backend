@@ -20,11 +20,13 @@ blogsRouter.post('/', (req, res) => {
     })
   }
 
+  var likes = (body.likes === undefined) ? 0 : body.likes
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: 0
+    likes: likes
   })
 
   blog.save().then(savedBlog => {
@@ -46,15 +48,18 @@ blogsRouter.get('/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-// DELETE ONE BLOG
-blogsRouter.delete('/:id', (req, res, next) => {
-  Blog.findByIdAndDelete(req.params.id)
-    .then(res.status(204).end())
-    .catch(error => next(error))
+// 4.13 blogilistan laajennus, step1, DELETE ONE BLOG
+blogsRouter.delete('/:id', async (req, res, next) => {
+  try {
+    await Blog.findByIdAndDelete(req.params.id)
+    res.status(204).end()
+  } catch (exception) {
+    next(exception)
+  }
 })
 
-// UPDATE BLOG
-blogsRouter.put('/:id', (req, res, next) => {
+// 4.14* blogilistan laajennus, step2, UPDATE BLOG
+blogsRouter.put('/:id', async (req, res, next) => {
   const body = req.body
 
   const blog = {
@@ -63,12 +68,12 @@ blogsRouter.put('/:id', (req, res, next) => {
     url: body.url,
     likes: body.likes
   }
-
-  Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
-    .then(updatedBlog => {
-      res.json(updatedBlog.toJSON())
-    })
-    .catch(error => next(error))
+  try {
+    await Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
+    updatedBlog => res.json(updatedBlog.toJSON())
+  } catch (exception){
+    next(exception)
+  }
 })
 
 module.exports = blogsRouter
